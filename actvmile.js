@@ -8,6 +8,7 @@ https://motoactv.com/data/workoutDetail.json?workoutActivityId=23t3eoKlRcm6WbobH
 
 		*/
 		
+		
 		/*
 		
 getShareURLAndCall: function(callback, id) {
@@ -40,12 +41,31 @@ getShareURLAndCall: function(callback, id) {
 		};
 		*/
 		
+
 var workoutId = "23t3eoKlRcm6WbobHNJmRQ==";
 var detailsUrl = "https://motoactv.com/data/workoutDetail.json?workoutActivityId=";
 
 
-$(function(){
-	var url = detailsUrl + urlencode( workoutId );
-	
-	
-});
+
+	var url = detailsUrl + encodeURI( workoutId );
+	//alert(url);
+	try{
+	$.ajax({
+		url: url,
+		data: { username: encodeURI('motorola@redune.com') },
+		success: function(data){
+		//alert('done');
+		alert(data);
+		var name = data.journaldata.journalname;
+		
+		alert(name);
+		},
+		error: function(data, status, errorThrown){
+			alert(data);
+		}
+	});
+	}catch(ex){
+		alert(ex);
+	}
+	alert('past');
+
