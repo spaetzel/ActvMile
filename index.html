@@ -1,16 +1,84 @@
-<html>
-<head>
-<title>ActvMile</title>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-<script src="actvmile.js" type="text/javascript"></script>
-</head>
-<body>
-	<h1>ActvMile</h1>
-	<p>ActvMile is a simple Bookmarklet that allows you to quickly post a workout from <a href="http://motoactv.com">MOTOACTV</a> to <a href="http://dailymile.com">dailymile</a>.</p>
-	<p>To use this tool, drag the below link to your Bookmarks bar:</p>
-	<p align="center">
-	<a href="javascript:(function(){ var newScript = document.createElement('script'); newScript.src = 'http://localhost/~wspaetzel/ActvMile/actvmile.js?dummy='+Math.random(); document.body.appendChild(newScript); })();">ActvMile</a>
-	</p>
-	<p>Then navigate to a workout on <a href="http://motoactv.com">MOTOACTV.com</a>, fill in your journal and then click the new ActvMile button in your toolbar. This will create a new dailymile workout entry and redirect you to the entry.</p>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bootstrap, from Twitter</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">ActvMile</a>
+          <ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#get">Get</a></li>
+            <li><a href="#instructions">Instructions</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#contact">Github</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>ActvMile</h1>
+        <p>A simple Bookmarklet that allows you to quickly post a workout from <a href="http://motoactv.com">MOTOACTV</a> to <a href="http://dailymile.com">dailymile</a>.</p>
+        <p><a class="btn primary large" href="#get">Get It</a></p>
+      </div>
+
+	
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="span6">
+          <h2>Install Bookmarklet</h2>
+          <p>To use this tool, drag the button on the right to your Bookmarks bar:</p>
+        </div>
+        <div class="span5">
+          <p align="center"><a class="btn primary large" href="javascript:(function(){ var newScript = document.createElement('script'); newScript.src = 'http://localhost/~wspaetzel/ActvMile/actvmile.js?dummy='+Math.random(); document.body.appendChild(newScript); })();">ActvMile</a></p>
+       </div>
+        <div class="span5">
+          <h2>Use It</h2>
+          <p>Then navigate to a workout on <a href="http://motoactv.com">MOTOACTV.com</a>, fill in your journal and then click the new ActvMile button in your toolbar. This will create a new dailymile workout entry and redirect you to the entry.</p>
+          <p><a class="btn" href="http://motoactv.com">Go to MOTOACTV</a></p>
+        </div>
+      </div>
+      
+
+      <div class="row">
+      	<h2>Video Instructions</h2>
+      </div>
+      
+   
+      <div class="row" name="contact">
+      	<h2>Contact</h2>
+      </div>
+
+      <footer>
+        <p>&copy; William Spaetzel 2012</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
 </html>
