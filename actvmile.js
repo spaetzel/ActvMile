@@ -5,6 +5,7 @@ var authUrl = "https://api.dailymile.com/oauth/authorize?response_type=token";
 var redirectUrl = "http://localhost/~wspaetzel/actvmile/auth.html";
 var oauthToken;
 var tokenCookie = "dailymile_token";
+var endTime;
 
 /*
 var ipv_activityType="1";
@@ -17,12 +18,24 @@ https://motoactv.com/data/workoutDetail.json?workoutActivityId=23t3eoKlRcm6WbobH
 		*/
 var frame = "<iframe name='hiddenFrame' id='hiddenFrame'><h1>Hello world</h1></iframe>";
 
-function waitFrame(){
-$('#iframeID').contents().find('#someID').html();
-
-	var result = $('#hiddenFrame').contents().first();
+function getEntry(){
+	var end = endTime / 1000;
 	
-	alert(result);
+	var padding = 100000;
+	
+	var url = "http://api.dailymile.com/people/me/entries.json?until=" + (end + padding ) + "&since=" + ( end - padding) + "&callback=?";
+	
+	$.getJSON(url,
+		function(data){
+			var url = data.entries[0].url;
+			window.location = url;
+		}
+	);
+}
+
+function waitFrame(){
+
+	getEntry();
 }
 		
 function createCookie(name,value,days) {
@@ -65,7 +78,7 @@ function formatTime(timestamp){
 	var date = new Date(timestamp);
 
 	
-	var formattedTime =  date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + "T" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "Z";
+	var formattedTime =  date.getFullYear() + "-" + ( date.getMonth() + 1 ) + "-" + date.getDate() + "T" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "Z";
 	
 	return formattedTime;
 }		
@@ -164,7 +177,7 @@ function doPost(){
 		success: function(data){
 
 			var startTime = data.summary.STARTTIME;
-			var endTime = data.summary.ENDTIME;
+			endTime = data.summary.ENDTIME;
 
 			var notes =  data.journaldata.journalnotes;
 			
