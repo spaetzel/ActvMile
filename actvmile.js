@@ -89,19 +89,20 @@ function getShareUrl(id, callback) {
 };
 
 function postWorkout( entry ){
+/*
+$.post(url, dataToBeSent, function(data, textStatus) {
+  //data contains the JSON object
+  //textStatus contains the status: success, error, etc
+}, "json");
 
-	$.ajax({
-		url: "https://api.dailymile.com/entries.json?oauth_token=" + oauthToken,
-		type: 'POST',
-		data: entry,
-		dataType: 'json',
-		success: function(json) {
-			alert(json)
-		},
-		error: function(j,m,e){
-			alert("error posting working");
-		}
-	});
+*/
+	$.post("https://api.dailymile.com/entries.json?oauth_token=" + oauthToken + "&callback=?",
+		 entry,
+	 function(data, textStatus) {
+  		alert(data)
+	}, "json");
+
+
 }
 
 
