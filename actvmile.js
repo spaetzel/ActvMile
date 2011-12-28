@@ -15,6 +15,15 @@ var ipv_workoutActivityID="23t3eoKlRcm6WbobHNJmRQ==";
 https://motoactv.com/data/workoutDetail.json?workoutActivityId=23t3eoKlRcm6WbobHNJmRQ%3D%3D&activity=1&r=0.8102906856220216
 
 		*/
+var frame = "<iframe name='hiddenFrame' id='hiddenFrame'><h1>Hello world</h1></iframe>";
+
+function waitFrame(){
+$('#iframeID').contents().find('#someID').html();
+
+	var result = $('#hiddenFrame').contents().first();
+	
+	alert(result);
+}
 		
 function createCookie(name,value,days) {
 	if (days) {
@@ -96,13 +105,52 @@ $.post(url, dataToBeSent, function(data, textStatus) {
 }, "json");
 
 */
-	$.post("https://api.dailymile.com/entries.json?oauth_token=" + oauthToken + "&callback=?",
+
+var url = "https://api.dailymile.com/entries.json?oauth_token=" + oauthToken;
+
+/*
+	$.post(url,
 		 entry,
 	 function(data, textStatus) {
   		alert(data)
 	}, "json");
 
+*/
 
+/*	lat: data.route[0].LATITUDE,
+					lon: data.route[0].LONGITUDE,
+					message: message,
+					workout: {
+						activity_type: "running",
+						completed_at: formatTime( endTime ),
+						distance: {
+							value: data.summary.DISTANCE, 
+							units: "kilometers"
+						},
+						duration: ( endTime - startTime ) / 1000,
+						calories: data.summary.CALORIEBURN,
+						title: data.journaldata.journalname
+					}*/
+					
+	var form = "<form action='" + url + "' target='hiddenFrame' id='hiddenForm' method='POST'> \
+		<input type='hidden' name='lat' value='" + entry.lat + "'> \
+		<input type='hidden' name='lon' value='" + entry.lon + "'> \
+		<input type='hidden' name='workout[title]' value='" + entry.workout.title + "'> \
+		<input type='hidden' name='workout[activity_type]' value='" + entry.workout.activity_type + "'> \
+		<input type='hidden' name='workout[duration]' value='" + entry.workout.duration + "'> \
+		<input type='hidden' name='workout[calories]' value='" + entry.workout.calories + "'> \
+		<input type='hidden' name='workout[completed_at]' value='" + entry.workout.completed_at + "'> \
+		<input type='hidden' name='workout[distance][value]' value='" + entry.workout.distance.value + "'> \
+		<input type='hidden' name='workout[distance][units]' value='" + entry.workout.distance.units + "'> \
+		<input type='hidden' name='message' value='" + entry.message + "'> \
+		</form>"
+		
+	$(frame).appendTo('body');
+	$(form).appendTo('body');
+	
+	$('#hiddenForm').submit();
+	
+	setTimeout(waitFrame, 100 );
 }
 
 
@@ -113,7 +161,6 @@ function doPost(){
 	try{
 	$.ajax({
 		url: url,
-		data: { username: encodeURI('motorola@redune.com') },
 		success: function(data){
 
 			var startTime = data.summary.STARTTIME;
@@ -139,7 +186,7 @@ function doPost(){
 						activity_type: "running",
 						completed_at: formatTime( endTime ),
 						distance: {
-							value: endTime, 
+							value: data.summary.DISTANCE, 
 							units: "kilometers"
 						},
 						duration: ( endTime - startTime ) / 1000,
