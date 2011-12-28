@@ -5,8 +5,49 @@ var redirectUrl = "http://localhost/~wspaetzel/actvmile/auth.html";
 var oauthToken;
 var tokenCookie = "dailymile_token";
 var endTime;
+var gpx;
+var frame = "<iframe name='hiddenFrame' id='hiddenFrame'></iframe>";
 
-var frame = "<iframe name='hiddenFrame' id='hiddenFrame'><h1>Hello world</h1></iframe>";
+function getGpx(data){
+	var output = '<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="Garmin Connect"  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"  xmlns="http://www.topografix.com/GPX/1/1">';
+   output += '<trk>    <trkseg>\n';
+   
+   	var counter = 0;
+   	
+   	//  / 100
+   	
+   	$(data.route).each(function(){
+	   	var trackTime = ( data.workoutDetail[1].time.data[counter] ) ;
+      	
+   		output += "<trkpt lon=\"" + this.LONGITUDE +"\" lat=\"" + this.LATITUDE + "\">\n"; 
+        output += "<ele>" + data.workoutDetail[1].ELEVATION.data[counter] + "</ele>\n";
+     //   output += "<time>" + formatTime( trackTime ) + "</time>\n";
+      	output += "</trkpt>\n";
+      	
+      	counter++;
+   	});
+   	
+   	output += '    </trkseg>  </trk></gpx>';
+   	
+   	return output;
+   
+}
+
+function addGpx(entry){
+	var id = entry.id;
+			
+	$.ajax({
+		url: 'https://api.dailymile.com/entries/' + id + '/track.json?oauth_token=' + oauthToken,
+		type: 'PUT',
+		data: gpx,
+		mimeType: 'application/gpx+xml',
+		success: function(){
+			alert('added map');
+			var url = entry.url;
+			window.location = url;
+		}
+	});
+}
 
 function getEntry(){
 	var end = endTime / 1000;
@@ -17,8 +58,9 @@ function getEntry(){
 	
 	$.getJSON(url,
 		function(data){
-			var url = data.entries[0].url;
-			window.location = url;
+			addGpx( data.entries[0] );
+			
+			
 		}
 	);
 }
@@ -63,13 +105,15 @@ function authorizeDailymile(){
 
 function formatTime(timestamp){
 	// create a new javascript Date object based on the timestamp
-	
+
 	var date = new Date(timestamp);
 
 	
 	var formattedTime =  date.getFullYear() + "-" + ( date.getMonth() + 1 ) + "-" + date.getDate() + "T" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "Z";
 	
+	
 	return formattedTime;
+	
 }		
 	
 function cleanString(input){
@@ -168,8 +212,9 @@ function doPost(){
 
 			var notes =  data.journaldata.journalnotes;
 			
-			
-			
+			gpx = getGpx( data );	
+					
+	
 			getShareUrl(workoutId, function(shareUrl){
 			
 				var message;
@@ -197,7 +242,8 @@ function doPost(){
 						title: cleanString(data.journaldata.journalname)
 					}
 				};
-				
+			
+			
 				postWorkout( entry );
 			});
 			
