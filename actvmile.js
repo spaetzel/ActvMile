@@ -6,15 +6,6 @@ var oauthToken;
 var tokenCookie = "dailymile_token";
 var endTime;
 
-/*
-var ipv_activityType="1";
-var ipv_activityName="Run";
-var ipv_workoutActivityID="23t3eoKlRcm6WbobHNJmRQ==";
-
-
-https://motoactv.com/data/workoutDetail.json?workoutActivityId=23t3eoKlRcm6WbobHNJmRQ%3D%3D&activity=1&r=0.8102906856220216
-
-		*/
 var frame = "<iframe name='hiddenFrame' id='hiddenFrame'><h1>Hello world</h1></iframe>";
 
 function getEntry(){
@@ -33,7 +24,6 @@ function getEntry(){
 }
 
 function waitFrame(){
-
 	getEntry();
 }
 		
@@ -114,39 +104,9 @@ function getShareUrl(id, callback) {
 };
 
 function postWorkout( entry ){
-/*
-$.post(url, dataToBeSent, function(data, textStatus) {
-  //data contains the JSON object
-  //textStatus contains the status: success, error, etc
-}, "json");
 
-*/
+	var url = "https://api.dailymile.com/entries.json?oauth_token=" + oauthToken;
 
-var url = "https://api.dailymile.com/entries.json?oauth_token=" + oauthToken;
-
-/*
-	$.post(url,
-		 entry,
-	 function(data, textStatus) {
-  		alert(data)
-	}, "json");
-
-*/
-
-/*	lat: data.route[0].LATITUDE,
-					lon: data.route[0].LONGITUDE,
-					message: message,
-					workout: {
-						activity_type: "running",
-						completed_at: formatTime( endTime ),
-						distance: {
-							value: data.summary.DISTANCE, 
-							units: "kilometers"
-						},
-						duration: ( endTime - startTime ) / 1000,
-						calories: data.summary.CALORIEBURN,
-						title: data.journaldata.journalname
-					}*/
 					
 	var form = "<form action='" + url + "' target='hiddenFrame' id='hiddenForm' method='POST'> \
 		<input type='hidden' name='lat' value='" + entry.lat + "'> \
