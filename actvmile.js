@@ -9,9 +9,7 @@ https://motoactv.com/data/workoutDetail.json?workoutActivityId=23t3eoKlRcm6WbobH
 		*/
 		
 		
-		/*
-		
-getShareURLAndCall: function(callback, id) {
+function getShareUrl(id, callback) {
 
 			var postData = {
 				workoutActivityId: id
@@ -26,20 +24,18 @@ getShareURLAndCall: function(callback, id) {
 					$("#socialWaitDialog").dialog("close");
 
 					if (json && ((typeof json.code == "undefined") || (json.code > -1))) {
-						moto.sharing.urlToShare = json.short_url;
-						moto.sharing.urlToShare = encodeURI(moto.sharing.urlToShare);
-						moto.sharing.urlToShare = moto.sharing.urlToShare.replace(/:/g, "%3A");
-						moto.sharing.urlToShare = moto.sharing.urlToShare.replace(/\//g, "%2F");
+						var urlToShare = json.short_url;
+					
 						
-						callback(moto.sharing.urlToShare);
+						callback(urlToShare);
 					}
 					else {
-						moto.message(motostrings["workouts"]["latest"]["share"]["error"]["string"]);
+						alert("Error getting share url");
 					}
 				}
 			});
 		};
-		*/
+		
 		
 
 var workoutId = "23t3eoKlRcm6WbobHNJmRQ==";
@@ -54,11 +50,22 @@ var detailsUrl = "https://motoactv.com/data/workoutDetail.json?workoutActivityId
 		url: url,
 		data: { username: encodeURI('motorola@redune.com') },
 		success: function(data){
-		//alert('done');
-		alert(data);
-		var name = data.journaldata.journalname;
-		
-		alert(name);
+
+			var name = data.journaldata.journalname;
+			var notes = data.journaldata.journalnotes;
+			
+			var distance = data.summary.DISTANCE;
+			
+			var startTime = data.summary.STARTTIME;
+			var endTime = data.summary.ENDTIME;
+			
+			var elapsedTime = endTime - startTime;
+
+			getShareUrl(workoutId, function(url){
+				alert(url);
+				window.open(url);
+			});
+			
 		},
 		error: function(data, status, errorThrown){
 			alert(data);
@@ -67,5 +74,4 @@ var detailsUrl = "https://motoactv.com/data/workoutDetail.json?workoutActivityId
 	}catch(ex){
 		alert(ex);
 	}
-	alert('past');
 
