@@ -1,3 +1,11 @@
+var clientId = "TGvDSuLUiT2Sl5m5Skz04yHBQi9NtFyCG29gY6Rt";
+var workoutId = "23t3eoKlRcm6WbobHNJmRQ==";
+var detailsUrl = "https://motoactv.com/data/workoutDetail.json?workoutActivityId=";
+var authUrl = "https://api.dailymile.com/oauth/authorize?response_type=token";
+var redirectUrl = "http://localhost/~wspaetzel/actvmile/auth.html";
+var oauthToken;
+var tokenCookie = "dailymile_token";
+
 /*
 var ipv_activityType="1";
 var ipv_activityName="Run";
@@ -8,8 +16,39 @@ https://motoactv.com/data/workoutDetail.json?workoutActivityId=23t3eoKlRcm6WbobH
 
 		*/
 		
-		
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
 
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function eraseCookie(name) {
+	createCookie(name,"",-1);
+}
+		
+function authorizeDailymile(){
+	
+
+	var url = authUrl + "&client_id=" + clientId + "&redirect_uri=" + encodeURI(document.location);
+	
+	window.location = url;
+	
+}
 
 function formatTime(timestamp){
 	// create a new javascript Date object based on the timestamp
@@ -50,11 +89,12 @@ function getShareUrl(id, callback) {
 };
 
 function postWorkout( entry ){
+
 	$.ajax({
-		url: "https://api.dailymile.com/entries.json",
+		url: "https://api.dailymile.com/entries.json?oauth_token=" + oauthToken,
 		type: 'POST',
 		data: entry,
-		dataType: 'jsonp',
+		dataType: 'json',
 		success: function(json) {
 			alert(json)
 		},
@@ -64,11 +104,9 @@ function postWorkout( entry ){
 	});
 }
 
-var workoutId = "23t3eoKlRcm6WbobHNJmRQ==";
-var detailsUrl = "https://motoactv.com/data/workoutDetail.json?workoutActivityId=";
 
-
-
+function doPost(){
+	
 	var url = detailsUrl + encodeURI( workoutId );
 	//alert(url);
 	try{
@@ -120,4 +158,27 @@ var detailsUrl = "https://motoactv.com/data/workoutDetail.json?workoutActivityId
 	}catch(ex){
 		alert(ex);
 	}
+}
 
+oauthToken = readCookie(tokenCookie);
+
+if( oauthToken ){
+
+	doPost();
+}else{
+	var searchString = "access_token=";
+	
+	var loc = window.location.toString();
+	
+	var tokenLocation = loc.indexOf(searchString);
+	
+	if( tokenLocation > 0 ){
+		oauthToken = loc.substring(tokenLocation + searchString.length );
+		createCookie(tokenCookie, oauthToken, 365);
+		
+		doPost();
+	}else{
+		authorizeDailymile();
+	}
+		
+}
