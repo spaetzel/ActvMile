@@ -1,5 +1,4 @@
 var clientId = "TGvDSuLUiT2Sl5m5Skz04yHBQi9NtFyCG29gY6Rt";
-var workoutId = "23t3eoKlRcm6WbobHNJmRQ==";
 var detailsUrl = "https://motoactv.com/data/workoutDetail.json?workoutActivityId=";
 var authUrl = "https://api.dailymile.com/oauth/authorize?response_type=token";
 var redirectUrl = "http://localhost/~wspaetzel/actvmile/auth.html";
@@ -82,7 +81,11 @@ function formatTime(timestamp){
 	
 	return formattedTime;
 }		
-		
+	
+function cleanString(input){
+	return input.replace(/"/g, '&quot;').replace(/'/g, '');
+}
+
 function getShareUrl(id, callback) {
 
 	var postData = {
@@ -163,11 +166,35 @@ var url = "https://api.dailymile.com/entries.json?oauth_token=" + oauthToken;
 	
 	$('#hiddenForm').submit();
 	
-	setTimeout(waitFrame, 100 );
+	setTimeout(waitFrame, 500 );
 }
 
+function getWorkoutId(){
+
+	var searchString = 'ipv_workoutActivityID="';
+	var match;
+	
+	$('body script').each(function(){
+		var text = $(this).text();
+
+		var location = text.indexOf( searchString );
+		
+		if( location > 0 ){
+			location = location + searchString.length;
+			
+			var end = text.indexOf('";', location);
+
+		 match = text.substring(location, end );
+		
+		}
+	});
+	
+	return match;
+}
 
 function doPost(){
+	var workoutId = getWorkoutId();
+
 	
 	var url = detailsUrl + encodeURI( workoutId );
 	//alert(url);
@@ -181,20 +208,23 @@ function doPost(){
 
 			var notes =  data.journaldata.journalnotes;
 			
+			
+			
 			getShareUrl(workoutId, function(shareUrl){
 			
 				var message;
 				if( notes)		
 				{
-					message = data.journaldata.journalnotes + " " + shareUrl;
+					message = notes + " " + shareUrl;
 				}else{
 					message = shareUrl;
 				}
+	
 				
 				var entry = {
 					lat: data.route[0].LATITUDE,
 					lon: data.route[0].LONGITUDE,
-					message: message,
+					message: cleanString(message),
 					workout: {
 						activity_type: "running",
 						completed_at: formatTime( endTime ),
@@ -204,7 +234,7 @@ function doPost(){
 						},
 						duration: ( endTime - startTime ) / 1000,
 						calories: data.summary.CALORIEBURN,
-						title: data.journaldata.journalname
+						title: cleanString(data.journaldata.journalname)
 					}
 				};
 				
