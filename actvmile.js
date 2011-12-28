@@ -34,8 +34,6 @@ function getShareUrl(id, callback) {
 		data: postData,
 		dataType: 'json',
 		success: function(json) {
-			$("#socialWaitDialog").dialog("close");
-
 			if (json && ((typeof json.code == "undefined") || (json.code > -1))) {
 				var urlToShare = json.short_url;
 			
@@ -51,7 +49,20 @@ function getShareUrl(id, callback) {
 	});
 };
 
-
+function postWorkout( entry ){
+	$.ajax({
+		url: "https://api.dailymile.com/entries.json",
+		type: 'POST',
+		data: entry,
+		dataType: 'jsonp',
+		success: function(json) {
+			alert(json)
+		},
+		error: function(j,m,e){
+			alert("error posting working");
+		}
+	});
+}
 
 var workoutId = "23t3eoKlRcm6WbobHNJmRQ==";
 var detailsUrl = "https://motoactv.com/data/workoutDetail.json?workoutActivityId=";
@@ -69,43 +80,36 @@ var detailsUrl = "https://motoactv.com/data/workoutDetail.json?workoutActivityId
 			var startTime = data.summary.STARTTIME;
 			var endTime = data.summary.ENDTIME;
 
-			var entry = {
-				lat: data.route[0].LATITUDE,
-				lon: data.route[0].LONGITUDE,
-				workout: {
-					activity_type: "running",
-					completed_at: formatTime( endTime ),
-					distance: {
-						value: endTime, 
-						units: "kilometers"
-					},
-					duration: ( endTime - startTime ) / 1000,
-					calories: data.summary.CALORIEBURN,
-					title: data.journaldata.journalname
+			var notes =  data.journaldata.journalnotes;
+			
+			getShareUrl(workoutId, function(shareUrl){
+			
+				var message;
+				if( notes)		
+				{
+					message = data.journaldata.journalnotes + " " + shareUrl;
+				}else{
+					message = shareUrl;
 				}
-			};
-			
-			alert(entry.workout.title);
-				/*
-
-
-workout[title], string (optional)
-optional title for a workout
-workout[route_id], integer (optional)
-the id of the route associated with this workout (see route docs)
-*/
-
-			var name = ;
-			var notes = data.journaldata.journalnotes;
-			
-			
-			
-			//var endTime = data.summary.ENDTIME;
-			
-			var elapsedTime = endTime - startTime;
-
-			getShareUrl(workoutId, function(url){
-				alert(url);
+				
+				var entry = {
+					lat: data.route[0].LATITUDE,
+					lon: data.route[0].LONGITUDE,
+					message: message,
+					workout: {
+						activity_type: "running",
+						completed_at: formatTime( endTime ),
+						distance: {
+							value: endTime, 
+							units: "kilometers"
+						},
+						duration: ( endTime - startTime ) / 1000,
+						calories: data.summary.CALORIEBURN,
+						title: data.journaldata.journalname
+					}
+				};
+				
+				postWorkout( entry );
 			});
 			
 		},
