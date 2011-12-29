@@ -183,6 +183,7 @@ function doPost(){
 
 	$.ajax({
 		url: url,
+		type: 'POST',
 		success: function(data){
 
 			var startTime = data.summary.STARTTIME;
