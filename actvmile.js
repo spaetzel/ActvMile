@@ -188,7 +188,16 @@ function doPost(){
 			var startTime = data.summary.STARTTIME;
 			endTime = data.summary.ENDTIME;
 
-			var notes =  data.journaldata.journalnotes;
+			
+			var notes;
+			var name;
+			
+			if( data.journaldata ){
+			 	notes =  data.journaldata.journalnotes;
+				name = data.journaldata.journalname;
+			}else{
+				name = "";
+			}
 			
 			getShareUrl(workoutId, function(shareUrl){
 			
@@ -214,7 +223,7 @@ function doPost(){
 						},
 						duration: ( endTime - startTime ) / 1000,
 						calories: data.summary.CALORIEBURN,
-						title: cleanString(data.journaldata.journalname)
+						title: cleanString(name)
 					}
 				};
 			
