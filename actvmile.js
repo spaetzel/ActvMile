@@ -138,9 +138,7 @@ function postWorkout( entry ){
 	setTimeout(getEntry, 100 );
 }
 
-function getWorkoutId(){
-
-	var searchString = 'ipv_workoutActivityID="';
+function getVariable( searchString ){
 	var match;
 	
 	$('body script').each(function(){
@@ -157,13 +155,29 @@ function getWorkoutId(){
 		
 		}
 	});
-	
 	return match;
+}
+
+function getUnits(){
+
+	return getVariable('ipv_userUnits = "');
+}
+
+function getWorkoutId(){
+
+	return getVariable('ipv_workoutActivityID="');
 }
 
 function doPost(){
 	var workoutId = getWorkoutId();
 
+	var units;
+	if( getUnits() == 'METRIC' ){
+		units = 'kilometers';
+	}else{
+		units = 'miles';
+	}
+	
 	
 	var url = detailsUrl + encodeURI( workoutId );
 
@@ -196,7 +210,7 @@ function doPost(){
 						completed_at: formatTime( endTime ),
 						distance: {
 							value: data.summary.DISTANCE, 
-							units: "kilometers"
+							units: units
 						},
 						duration: ( endTime - startTime ) / 1000,
 						calories: data.summary.CALORIEBURN,
