@@ -178,12 +178,12 @@ function doPost(){
 		units = 'miles';
 	}
 	
-	
-	var url = detailsUrl + encodeURI( workoutId );
+	var cleanedId = workoutId.replace(/\+/g, '%2B').replace(/=/g, '%3D');
+
+	var url = detailsUrl + cleanedId;
 
 	$.ajax({
 		url: url,
-		type: 'POST',
 		success: function(data){
 
 			var startTime = data.summary.STARTTIME;
