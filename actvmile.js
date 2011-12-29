@@ -158,6 +158,7 @@ function getVariable( searchString ){
 	return match;
 }
 
+
 function getUnits(){
 
 	return getVariable('ipv_userUnits = "');
@@ -166,6 +167,18 @@ function getUnits(){
 function getWorkoutId(){
 
 	return getVariable('ipv_workoutActivityID="');
+}
+
+function getWorkoutType(){
+	var activityName = getVariable('var ipv_activityName="');
+	
+	if( activityName=='Walk'){
+		return "walking";
+	}else if( activityName == 'Run'){
+		return "running";
+	}else if( activityName == 'Cycle'){
+		return "cycling";
+	}
 }
 
 function doPost(){
@@ -177,6 +190,9 @@ function doPost(){
 	}else{
 		units = 'miles';
 	}
+	
+	var workoutType = getWorkoutType();
+	
 	
 	var cleanedId = workoutId.replace(/\+/g, '%2B').replace(/=/g, '%3D');
 
@@ -216,7 +232,7 @@ function doPost(){
 					lon: data.route[0].LONGITUDE,
 					message: cleanString(message),
 					workout: {
-						activity_type: "running",
+						activity_type: workoutType,
 						completed_at: formatTime( endTime ),
 						distance: {
 							value: data.summary.DISTANCE, 
