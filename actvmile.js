@@ -53,7 +53,10 @@ function eraseCookie(name) {
 }
 		
 function authorizeDailymile(){
+	var message = "You need to authorize ActvMile to post to your dailymile account. You will be redirected to \
+	the authorization page and then back here. Click \"ActvMile\" again when you return to post your workout";
 	
+	alert(message);
 
 	var url = authUrl + "&client_id=" + clientId + "&redirect_uri=" + encodeURI(document.location);
 	
@@ -209,25 +212,29 @@ function doPost(){
 
 }
 
-oauthToken = readCookie(tokenCookie);
+if( window.location.indexOf("motoactv.com") > 0 ){
 
-if( oauthToken ){
-
-	doPost();
-}else{
-	var searchString = "access_token=";
+	oauthToken = readCookie(tokenCookie);
 	
-	var loc = window.location.toString();
+	if( oauthToken ){
 	
-	var tokenLocation = loc.indexOf(searchString);
-	
-	if( tokenLocation > 0 ){
-		oauthToken = loc.substring(tokenLocation + searchString.length );
-		createCookie(tokenCookie, oauthToken, 365);
-		
 		doPost();
 	}else{
-		authorizeDailymile();
-	}
+		var searchString = "access_token=";
 		
+		var loc = window.location.toString();
+		
+		var tokenLocation = loc.indexOf(searchString);
+		
+		if( tokenLocation > 0 ){
+			oauthToken = loc.substring(tokenLocation + searchString.length );
+			createCookie(tokenCookie, oauthToken, 365);
+			
+			doPost();
+		}else{
+			authorizeDailymile();
+		}	
+	}
+}else{
+	window.location = "http://motoactv.com";
 }
