@@ -57,8 +57,7 @@ function eraseCookie(name) {
 }
 		
 function authorizeDailymile(){
-	var message = "You need to authorize ActvMile to post to your dailymile account. You will be redirected to \
-	the authorization page and then back here. Click \"ActvMile\" again when you return to post your workout";
+	var message = "You need to authorize ActvMile to post to your dailymile account. You will be redirected to the authorization page and then back here. Click \"ActvMile\" again when you return to post your workout.";
 	
 	alert(message);
 
