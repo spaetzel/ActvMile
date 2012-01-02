@@ -61,7 +61,7 @@ function authorizeDailymile(){
 	
 	alert(message);
 
-	var url = authUrl + "&client_id=" + clientId + "&redirect_uri=" + encodeURI(document.location);
+	var url = authUrl + "&client_id=" + clientId + "&redirect_uri=http://motoactv.com/workout/show";
 	
 	window.location = url;
 	
