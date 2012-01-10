@@ -6,6 +6,12 @@ var tokenCookie = "dailymile_token";
 var endTime;
 var frame = "<iframe name='hiddenFrame' id='hiddenFrame'></iframe>";
 
+function showLoading(){
+	$('#metricGraph').hide();
+	$('#activitySliderContainer').hide();
+	$('.loader').show();
+}
+
 function getEntry(){
 	var end = endTime / 1000;
 	
@@ -256,7 +262,8 @@ function doPost(){
 }
 
 if( window.location.toString().indexOf("motoactv.com\/workout\/show") > 0 ){
-
+	showLoading();
+	
 	oauthToken = readCookie(tokenCookie);
 	
 	if( oauthToken ){
