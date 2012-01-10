@@ -12,6 +12,12 @@ function showLoading(){
 	$('.loader').show();
 }
 
+function showMessage(message){
+	$('.loader').hide();
+	$('#metricGraph').show();
+	$('#metricGraph').text(message);
+}
+
 function getEntry(){
 	var end = endTime / 1000;
 	
@@ -31,7 +37,7 @@ function getEntry(){
 			
 		},
 		error: function(jqXHR, textStatus, errorThrown){
-			authorizeDailymile();
+			showMessage("An error occurred posting to dailymile. The error is: " + errorThrown + "<br/>A please <a href='mailto:actvmile@redune.com'>e-mail the developer for help</a>");
 		}
 	});
 }
