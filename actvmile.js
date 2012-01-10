@@ -233,8 +233,7 @@ function doPost(){
 	
 				
 				var entry = {
-					lat: data.route[0].LATITUDE,
-					lon: data.route[0].LONGITUDE,
+
 					message: cleanString(message),
 					workout: {
 						activity_type: workoutType,
@@ -249,7 +248,11 @@ function doPost(){
 					}
 				};
 			
-			
+			 	if( data.route.length > 0 ){
+					entry.lat = data.route[0].LATITUDE;
+					entry.lon = data.route[0].LONGITUDE;
+				}
+				
 				postWorkout( entry );
 			});
 			
