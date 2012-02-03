@@ -83,10 +83,11 @@ function formatTime(timestamp){
 	// create a new javascript Date object based on the timestamp
 
 	var date = new Date(timestamp);
-
 	
-	var formattedTime =  date.getFullYear() + "-" + ( date.getMonth() + 1 ) + "-" + date.getDate() + "T" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "Z";
-	
+	//edited by engmex (pinr@rocketmail.com)
+	var offset = date.getTimezoneOffset()/60;
+	var formattedTime =  date.getFullYear() + "-" + ( date.getMonth() + 1 ) + "-" + date.getDate() + "T" + (date.getHours() + offset) + ":" + date.getMinutes() + ":" + date.getSeconds() + "Z";
+	//end engmex changes
 	
 	return formattedTime;
 	
